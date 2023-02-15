@@ -15,4 +15,4 @@ clean2 = FOREACH clean1 GENERATE name, hobby;
 DUMP clean2;
 -- Kelsey directory 
 -- STORE clean2 INTO '/Users/kelseymoody/Desktop/DS4433/taskA.csv' USING PigStorage(',');
-STORE clean2 INTO '/Users/danteamicarella/Desktop/DS4433/taskA.csv' USING PigStorage(',');
+STORE clean2 INTO '/Users/danteamicarella/Desktop/CS4433/taskA.csv' USING PigStorage(',');
