@@ -12,8 +12,8 @@ AccessLog = LOAD 'AccessLog.csv' USING PigStorage(',') AS (AccessId:int, WhatPag
 friendAccess = JOIN Friends BY MyFriends, AccessLog BY ByWho;
 friendAccess2 = FILTER friendAccess BY WhatPage == Friends::PersonID;
 friendsWithAccess = DISTINCT friendAccess2;
-allFriends = DISTINCT (Friends::PersonID);
-friendsWithoutAccess = FILTER allFriends BY NOT (PersonID IN friendsWithAccess::PersonID);
+allFriends = DISTINCT Friends::PersonID;
+friendsWithoutAccess = FILTER allFriends NOT IN (PersonID IN friendsWithAccess::PersonID);
 
 -- Extract PersonIDs
 result = FOREACH friendsWithoutAccess GENERATE PersonID;
