@@ -8,18 +8,23 @@ Friends = LOAD 'Friends.csv' USING PigStorage(',') AS (FriendRel:int, PersonID:i
 AccessLog = LOAD 'AccessLog.csv' USING PigStorage(',') AS (AccessId:int, WhatPage:int, ByWho:int, TypeOfAccess:chararray, AccessTime: int);
 
 
--- task F:
-friendAccess = JOIN Friends BY MyFriends, AccessLog BY ByWho;
-friendAccess2 = FILTER friendAccess BY WhatPage == Friends::PersonID;
-friendsWithAccess = DISTINCT friendAccess2;
-allFriends = DISTINCT Friends::PersonID;
-friendsWithoutAccess = FILTER allFriends BY NOT PersonID IN friendsWithAccess::PersonID;
+sameFriends = JOIN Friends BY PersonID, AccessLog BY ByWho;
+getPeople = FILTER sameFriends BY WhatPage != MyFriends;
+shortList = DISTINCT getPeople;
+result = FOREACH shortList GENERATE PersonID;
 
--- Extract PersonIDs
-result = FOREACH friendsWithoutAccess GENERATE PersonID;
+
+-- task F:
+-- friendAccess = JOIN Friends BY PersonID, AccessLog BY ByWho;
+-- friendAccess2 = FILTER friendAccess BY WhatPage == Friends::MyFriends;
+-- friendsWithAccess = DISTINCT friendAccess2;
+-- allFriends = DISTINCT Friends::PersonID;
+-- friendsWithoutAccess = FILTER allFriends BY PersonID NOT IN friendsWithAccess::PersonID;
+
+-- -- Extract PersonIDs
+-- result = FOREACH friendsWithoutAccess GENERATE PersonID;
 -- Kelsey
 -- STORE result INTO '/Users/kelseymoody/Desktop/DS4433/taskF.csv' USING PigStorage(',');
 -- Dante
 STORE result INTO 'PIGoutputF' USING PigStorage(',');
-
 
